@@ -1,9 +1,9 @@
 int* createArr( const int); 
 void freeMemory(int*&);
 void printArray(int*, int* ); // печать массива
-void inputArray(int*, int*); //
-void initRandArray(int*, int*); //инициализация элементов массива
-void initArray(int*, int*);//генерирует случайные числа от -k до k
+void inputArray(int*, int*); //инициализация массива введёнными с клавиатуры числами
+void initRandArray(int*, int*); //инициализация элементов массива от -к до к
+void initArray(int*, int*);//инициализация массива
 void initSortedArr(int*, int*); // вводит отсортированный массив рандомных чисел
 void initRandomArray(int*, int*, const int, const int);
 
