@@ -1,4 +1,4 @@
-int* giveMemory(int); 
+int* createArr( const int); 
 void freeMemory(int*&);
 void printArray(int*, int* ); // печать массива
 void inputArray(int*, int*); //

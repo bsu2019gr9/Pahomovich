@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int* giveMemory(int N)
+int* createArr( const int N)
 {
 	int* Arr = nullptr;
 	Arr = new int[N];
