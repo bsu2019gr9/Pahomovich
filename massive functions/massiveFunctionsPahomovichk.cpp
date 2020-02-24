@@ -11,6 +11,11 @@ int* createArr( const int N)
 	Arr = new int[N];
 	return Arr;
 }
+void* createArr(int N, int*& p)
+{
+	p = new (nothrow) int[N];
+	if (!p) exit(101);
+}
 void freeMemory(int*& Arr)// если передавать так, то после функции нужно очистить указатель; лучше передать по ссылке, чтобы поменять 
 {
 	delete[] Arr; Arr = nullptr;
