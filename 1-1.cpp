@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include<ctime>
-#include "massiveFunctionsPahomovichk.h"
+#include "ArraysPahomovich.h"
 using namespace std;
 
 int Task01(int*, int*);	//В массиве размера N, заполненного случ.числами от -10 до 10, 
