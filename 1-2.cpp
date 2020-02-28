@@ -10,7 +10,6 @@ int** createArray(int, int);
 void printArray(int**, int, int);
 void initRandArray(int**, int, int, int, int);
 void freeMemory(int**&, int);
-void findStrWithMinMaxEl(int**, int, int, int&, int&);
 void findIDStrWithMinMaxID(int**, int, int, int&, int&);
 int main()
 {
@@ -19,14 +18,14 @@ int main()
 	cin >> N;;
 	cout << " Enter size of cols: \n";
 	cin >> M;
-	int** arr = createArray(N, M);
-	initRandArray(arr, N, M, -10, 10);
-	printArray(arr, N, M);
-	int minRow = **arr, maxRow = **arr;
-	findIDStrWithMinMaxID(arr, N, M, minRow, maxRow);
-	swap(arr[minRow],arr[maxRow]);
-	printArray(arr, N, M);
-	freeMemory(arr, N);
+	int** A = createArray(N, M);
+	initRandArray(A, N, M, -10, 10);
+	printArray(A, N, M);
+	int minRow = **A, maxRow = **A;
+	findIDStrWithMinMaxID(A, N, M, minRow, maxRow);
+	swap(A[minRow],A[maxRow]);
+	printArray(A, N, M);
+	freeMemory(A, N);
 }
 
 int** createArray(int N, int M)
