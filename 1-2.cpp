@@ -10,7 +10,7 @@ int** createArray(int, int);
 void printArray(int**, int, int);
 void initRandArray(int**, int, int, int, int);
 void freeMemory(int**&, int);
-void findIDStrWithMinMaxID(int**, int, int, int&, int&);
+void findIDStrWithMinMax(int**, int, int, int&, int&);
 int main()
 {
 	int N = 0, M = 0;
@@ -22,7 +22,7 @@ int main()
 	initRandArray(A, N, M, -10, 10);
 	printArray(A, N, M);
 	int minRow = **A, maxRow = **A;
-	findIDStrWithMinMaxID(A, N, M, minRow, maxRow);
+	findIDStrWithMinMax(A, N, M, minRow, maxRow);
 	swap(A[minRow],A[maxRow]);
 	printArray(A, N, M);
 	freeMemory(A, N);
@@ -37,7 +37,6 @@ int** createArray(int N, int M)
 		if (!p[i]) exit(404);
 	}
 	cout << "\n";
-	char a = '99';
 	return p;
 }
 void printArray(int** p, int N, int M)
@@ -72,7 +71,8 @@ void findIDStrWithMinMax(int** p, int N, int M, int& minRow, int& maxRow)
 			if (p[i][j] <= min) { min = p[i][j]; minRow = i; }
 			if (p[i][j] >= max) { max = p[i][j]; maxRow = i; }
 		}
+	cout << "\n min element: " << min << "\t in Row: " << minRow;
+	cout << "\n max element: " << max << "\t in Row:" << maxRow;
 }
-
 
 

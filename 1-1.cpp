@@ -21,7 +21,8 @@ int main()
 	printArray(arr, arr + n);
 	cout << "\n ";
 	cout << " Count of Task 1: " << Task01(arr, arr + n)<<"\n";
-	initRandomArray(arr, arr + n, -10, 10);
+	// inputArray(arr, arr + n); //- для проверки
+	initRandomArray(arr, arr + n, -10, 20);
 	printArray(arr, arr + n);
 	cout << " Count of Task 2: " << Task02(arr, arr + n);
 	freeMemory(arr);
@@ -50,7 +51,7 @@ int Task02(int* beg, int* end)
 	{
 		if (elem == *p) ++counter;
 		else {
-			if (maxLength < counter) { maxLength = counter; counter = 1; }
+			if (maxLength <= counter) { maxLength = counter; counter = 1; }
 			elem = *p;
 		}
 	}
