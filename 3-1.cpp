@@ -13,7 +13,7 @@ const int subSize = 10;
 void Task(char*&, char*&, char*);
 int wordCounter(char*, char*);
 int main()
-{ // объявление основных данных, ввод строк, выполнение функции
+{ 
 	setlocale(LC_ALL, "Russian");
 
 	char* str = nullptr;
@@ -63,13 +63,13 @@ void Task(char*& str, char*& subStr, char* symb)
 	char* tmpStr = nullptr;
 	tmpStr = new(nothrow) char[strlen(str) + 2 + count]; //создание временного массива символов
 	count = 0;
-	char* start = tmpStr; //место, с которого заполняю строку tmpStr
+	char* start = tmpStr; 
 	int startLen = 0;
 
 	while (1)
 	{
 		tmpP = strstr(p, subStr); // tmp указывает на начало подстроки
-		p = tmpP + subLength; // p указывает на символ следующий за подстрокой 
+		p = tmpP + subLength;  
 		if (!tmpP)
 		{
 			if (str+length-beg > 0)  strcpy(start, beg);
