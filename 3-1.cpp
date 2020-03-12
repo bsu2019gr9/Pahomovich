@@ -1,5 +1,6 @@
 //После каждого слова строки, оканчивающегося заданной подстрокой, вставить указанный символ.
 
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <iomanip>
@@ -10,10 +11,10 @@ using namespace std;
 const int maxSize = 10000;
 const int subSize = 10;
 
-void Task(char*&, char*&, char*);
+void Task(char*&, char*, char*);
 int wordCounter(char*, char*);
 int main()
-{ 
+{ // объявление основных данных, ввод строк, выполнение функции
 	setlocale(LC_ALL, "Russian");
 
 	char* str = nullptr;
@@ -31,10 +32,13 @@ int main()
 	cin >> symb;
 	Task(str, subStr, symb);
 	cout << '\n' << str;
-	delete[] str;
+	delete[] str; str = nullptr;
+	delete[] subStr; subStr = nullptr;
+	delete[] symb; symb = nullptr;
 }
 int wordCounter(char* str, char* subStr)
 {
+	char separetors[]{ " '~`.,/|(;)\":!?" };
 	char* p = str,
 		* tmpP = nullptr;
 	int length = strlen(str),
@@ -45,12 +49,13 @@ int wordCounter(char* str, char* subStr)
 		tmpP = strstr(p, subStr); // tmp указывает на начало подстроки
 		p = tmpP + subLength; // p указывает на символ следующий за подстрокой
 		if (!tmpP) break;
-		if (*p == (char)32 || *p == '\0') counter++;
+		if (strpbrk(p, separetors) || *p == '\0') counter++;
 	}
 	return counter;
 }
-void Task(char*& str, char*& subStr, char* symb)
+void Task(char*& str, char* subStr, char* symb)
 {
+	char separetors[]{" '~`.,/|(;)\":!?"};
 	char* p = str,
 		* tmpP = nullptr,
 		* beg = str;
@@ -63,25 +68,25 @@ void Task(char*& str, char*& subStr, char* symb)
 	char* tmpStr = nullptr;
 	tmpStr = new(nothrow) char[strlen(str) + 2 + count]; //создание временного массива символов
 	count = 0;
-	char* start = tmpStr; 
+	char* start = tmpStr; //место, с которого заполняю строку tmpStr
 	int startLen = 0;
 
 	while (1)
 	{
 		tmpP = strstr(p, subStr); // tmp указывает на начало подстроки
-		p = tmpP + subLength;  
+		p = tmpP + subLength; // p указывает на символ следующий за подстрокой 
 		if (!tmpP)
 		{
 			if (str+length-beg > 0)  strcpy(start, beg);
 			break;
 		}
-		if (*p == (char)32 || *p == '\0')
+		if (strpbrk(p, separetors) || *p == '\0')
 		{
 			strncpy(start, beg, p - beg); // beg указывает на начало вставки, а p на конец вставки
 			start = start + (p - beg);
 			strcpy(start, symb);
 			start += 1;
-			strcpy(start, " ");
+			strncpy(start, p, 1);
 			start += 1;
 			beg = p + 1;
 		}
