@@ -11,6 +11,7 @@ void printArray(int**, int, int);
 void initRandArray(int**, int, int, int, int);
 void freeMemory(int**&, int);
 void findIDStrWithMinMax(int**, int, int, int&, int&);
+
 int main()
 {
 	int N = 0, M = 0;
@@ -21,7 +22,8 @@ int main()
 	int** A = createArray(N, M);
 	initRandArray(A, N, M, -10, 10);
 	printArray(A, N, M);
-	int minRow = **A, maxRow = **A;
+	cout << "\n";
+	int minRow = 0, maxRow = 0;  //номер строки с минимальным и максимальным элементами
 	findIDStrWithMinMax(A, N, M, minRow, maxRow);
 	swap(A[minRow],A[maxRow]);
 	printArray(A, N, M);
@@ -30,14 +32,13 @@ int main()
 
 int** createArray(int N, int M)
 {
-	int** p = new (nothrow) int* [N];
-	if (!p) exit(404);
+	int** arr = new (nothrow) int* [N];
+	if (!arr) exit(1);
 	for (int i = 0; i < N; i++) {
-		p[i] = new (nothrow) int[M];
-		if (!p[i]) exit(404);
+		arr[i] = new (nothrow) int[M];
+		if (!arr[i]) exit(1);
 	}
-	cout << "\n";
-	return p;
+	return arr;
 }
 void printArray(int** p, int N, int M)
 {
