@@ -1,14 +1,14 @@
 #include <iostream>
 using namespace std;
-
-struct Fraction
+//Класс арифметическая дробь.
+struct Fraction //хранится как "numerator/denominator"
 {
 private:
 	int numerator; //числитель дроби
 	int denominator; //знаменатель дроби
 public:
 	Fraction(); // конструктор без параметров
-	Fraction(int num, int denom); // конструктор с параметрами
+	Fraction(int, int = 1); // конструктор с параметрами 
 	Fraction(const Fraction& other); // конструктор копирования
 	~Fraction(); // деструктор
 	Fraction operator=(const Fraction& rhs); //оператор присваивания
@@ -16,26 +16,21 @@ public:
 	Fraction operator-(const Fraction& rhs); //вычитание двух дробей
 	Fraction operator*(const Fraction& rhs); //умножение двух дробей
 	Fraction operator/(const Fraction& rhs); // деление двух дробей
-	Fraction operator+(const int& rhs); //прибавление числа к дроби
-	Fraction operator-(const int& rhs); //отнимание числа от дроби
-	Fraction operator*(const int& rhs); //умножение дроби на число
-	Fraction operator/(const int& rhs); //деление дроби на число
+	Fraction operator+(const int rhs); //прибавление числа к дроби
+	Fraction operator-(const int rhs); //отнимание числа от дроби
+	Fraction operator*(const int rhs); //умножение дроби на число
+	Fraction operator/(const int rhs); //деление дроби на число
 	friend void operator<<(ostream& out, const Fraction& f); //вывод
 	friend void operator>>(istream& in, Fraction& f); //ввод
+private:
 	void reduceFr( ); //сокращение дроби
+	int founding_GCD(int tmp_a, int tmp_b)
+	{
+		if (tmp_a % tmp_b == 0) return tmp_b;
+		else return tmp_a % tmp_b;
+	}
 };
-int founding_GCD(int tmp_a, int tmp_b)
-{
-	if (tmp_a % tmp_b == 0) return tmp_b;
-	else return tmp_a % tmp_b;
-}
-void swap(int& a, int& b)
-{
-	int t;
-	t = a;
-	a = b;
-	b = t;
-}
+
 Fraction Value(Fraction fr) { 	return fr;   }
 Fraction* fff(Fraction* fr) {	return fr;   }
 Fraction Link(Fraction& fr) {	return fr;   }
@@ -75,10 +70,11 @@ Fraction::Fraction() :
 {
 	cout << "no params constructor working \n";
 };
-Fraction::Fraction(int num, int denom) : 
+Fraction::Fraction(int num, int denom = 1) : 
 	numerator(num),
 	denominator(denom)
 {
+	if (!denominator) throw "Bad arg";
 	cout << "constructor working for " << this->numerator << '/' << this->denominator << "\n";
 };
 Fraction::Fraction(const Fraction& other) :
