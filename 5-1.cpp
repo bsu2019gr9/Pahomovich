@@ -59,7 +59,7 @@ int main() {
 	cout << Link(fr2);
 	cout << fff(Fr2);
 	fr2 = { 4,8 };
-	fr2.reduceFr();
+	fr2.reduceFr();//это же приватный метод!!!!!
 	cout << fr2; cout << '\n';
 	delete Fr2; Fr2 = nullptr;
 }
@@ -73,7 +73,7 @@ Fraction::Fraction() :
 Fraction::Fraction(int num, int denom = 1) : 
 	numerator(num),
 	denominator(denom)
-{
+{// а где вызов GCD????
 	if (!denominator) throw "Bad arg";
 	cout << "constructor working for " << this->numerator << '/' << this->denominator << "\n";
 };
@@ -83,7 +83,7 @@ Fraction::Fraction(const Fraction& other) :
 {
 	cout << "copy constructor working for " << this->numerator << '/' << this->denominator << "\n";
 };
-Fraction::~Fraction() { cout << "destructor working for...\n"; };
+Fraction::~Fraction() { cout << "destructor working for...\n"; };//почему тут не написать << this->numerator << '/' << this->denominator << "\n";
 Fraction Fraction::operator=(const Fraction& rhs)
 {
 	cout << "= working for " << rhs.numerator << '/' << rhs.denominator << "\n";
