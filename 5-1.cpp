@@ -9,19 +9,19 @@ private:
 public:
 	Fraction(); // конструктор без параметров
 	Fraction(int, int = 1); // конструктор с параметрами 
-	Fraction(const Fraction& other); // конструктор копирования
+	Fraction(const Fraction& ); // конструктор копирования
 	~Fraction(); // деструктор
-	Fraction operator=(const Fraction& rhs); //оператор присваивания
-	Fraction operator+(const Fraction& rhs); //сложение двух дробей
-	Fraction operator-(const Fraction& rhs); //вычитание двух дробей
-	Fraction operator*(const Fraction& rhs); //умножение двух дробей
-	Fraction operator/(const Fraction& rhs); // деление двух дробей
-	Fraction operator+(const int rhs); //прибавление числа к дроби
-	Fraction operator-(const int rhs); //отнимание числа от дроби
-	Fraction operator*(const int rhs); //умножение дроби на число
-	Fraction operator/(const int rhs); //деление дроби на число
-	friend void operator<<(ostream& out, const Fraction& f); //вывод
-	friend void operator>>(istream& in, Fraction& f); //ввод
+	Fraction operator=(const Fraction& ); //оператор присваивания
+	Fraction operator+(const Fraction& ); //сложение двух дробей
+	Fraction operator-(const Fraction& ); //вычитание двух дробей
+	Fraction operator*(const Fraction& ); //умножение двух дробей
+	Fraction operator/(const Fraction& ); // деление двух дробей
+	Fraction operator+(const int ); //прибавление числа к дроби
+	Fraction operator-(const int ); //отнимание числа от дроби
+	Fraction operator*(const int ); //умножение дроби на число
+	Fraction operator/(const int ); //деление дроби на число
+	friend void operator<<(ostream& , const Fraction& ); //вывод
+	friend void operator>>(istream& , Fraction& ); //ввод
 private:
 	void reduceFr( ); //сокращение дроби
 	int founding_GCD(int tmp_a, int tmp_b)
@@ -48,7 +48,6 @@ int main() {
 	fr1 = { 1 , 2 };
 	cout << fr1; cout << '\n';
 	cin >> fr3;
-	cout << fr2; cout << '\n';
 	cout << fr3; cout << '\n';
 	Fraction f4 = { 1,1 };
 	f4 = fr3;
@@ -59,7 +58,6 @@ int main() {
 	cout << Link(fr2);
 	cout << fff(Fr2);
 	fr2 = { 4,8 };
-	fr2.reduceFr();//это же приватный метод!!!!!
 	cout << fr2; cout << '\n';
 	delete Fr2; Fr2 = nullptr;
 }
@@ -70,11 +68,12 @@ Fraction::Fraction() :
 {
 	cout << "no params constructor working \n";
 };
-Fraction::Fraction(int num, int denom = 1) : 
+Fraction::Fraction(int num, int denom) : 
 	numerator(num),
 	denominator(denom)
-{// а где вызов GCD????
+{
 	if (!denominator) throw "Bad arg";
+	else reduceFr();
 	cout << "constructor working for " << this->numerator << '/' << this->denominator << "\n";
 };
 Fraction::Fraction(const Fraction& other) :
@@ -83,7 +82,7 @@ Fraction::Fraction(const Fraction& other) :
 {
 	cout << "copy constructor working for " << this->numerator << '/' << this->denominator << "\n";
 };
-Fraction::~Fraction() { cout << "destructor working for...\n"; };//почему тут не написать << this->numerator << '/' << this->denominator << "\n";
+Fraction::~Fraction() { cout << "destructor working for..." << this->numerator << '/' << this->denominator << "\n";; };
 Fraction Fraction::operator=(const Fraction& rhs)
 {
 	cout << "= working for " << rhs.numerator << '/' << rhs.denominator << "\n";
@@ -109,19 +108,19 @@ Fraction Fraction::operator/(const Fraction& rhs)
 	return Fraction(numerator * rhs.denominator, denominator * rhs.numerator);
 }
 
-Fraction Fraction::operator+(const int& rhs) 
+Fraction Fraction::operator+(const int rhs) 
 {
 	return Fraction(numerator + denominator * rhs, denominator * denominator);
 }
-Fraction Fraction::operator-(const int& rhs)
+Fraction Fraction::operator-(const int rhs)
 {
 	return Fraction(numerator - denominator * rhs, denominator * denominator);
 }
-Fraction Fraction::operator*(const int& rhs) 
+Fraction Fraction::operator*(const int rhs) 
 {
 	return Fraction(numerator * rhs, denominator);
 }
-Fraction Fraction::operator/(const int& rhs) 
+Fraction Fraction::operator/(const int rhs) 
 {
 	return Fraction(numerator, denominator * rhs);
 }
