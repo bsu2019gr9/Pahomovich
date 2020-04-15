@@ -1,6 +1,9 @@
 #include <iostream>
+#include "ArraysPahomovich.h"
+
 using namespace std;
 //Класс арифметическая дробь.
+
 struct Fraction //хранится как "numerator/denominator"
 {
 private:
@@ -11,15 +14,28 @@ public:
 	Fraction(int, int = 1); // конструктор с параметрами 
 	Fraction(const Fraction& ); // конструктор копирования
 	~Fraction(); // деструктор
-	Fraction operator=(const Fraction& ); //оператор присваивания
-	Fraction operator+(const Fraction& ); //сложение двух дробей
-	Fraction operator-(const Fraction& ); //вычитание двух дробей
-	Fraction operator*(const Fraction& ); //умножение двух дробей
-	Fraction operator/(const Fraction& ); // деление двух дробей
-	Fraction operator+(const int ); //прибавление числа к дроби
-	Fraction operator-(const int ); //отнимание числа от дроби
-	Fraction operator*(const int ); //умножение дроби на число
-	Fraction operator/(const int ); //деление дроби на число
+
+	Fraction operator=(const Fraction& ) ; //оператор присваивания
+	Fraction operator+(const Fraction& ) const; //сложение двух дробей
+	Fraction operator-(const Fraction& ) const; //вычитание двух дробей
+	Fraction operator*(const Fraction& ) const; //умножение двух дробей
+	Fraction operator/(const Fraction& ) const; // деление двух дробей
+	Fraction operator+(const int ) const; //прибавление числа к дроби
+	Fraction operator-(const int ) const; //отнимание числа от дроби
+	Fraction operator*(const int ) const; //умножение дроби на число
+	Fraction operator/(const int ) const; //деление дроби на число
+
+	Fraction operator+=(const Fraction& ); //прибавление дроби с присваиванием
+	Fraction operator-=(const Fraction& ); //вычитание дроби с присваиванием
+	Fraction operator*=(const Fraction& ); //умножение на дробь с присваиванием
+	Fraction operator+=(const int); //прибавление целого числа с присваиванием
+	Fraction operator-=(const int); //вычитание целого числа из дроби с присваиванием
+	Fraction operator*=(const int); //умножение на целое число с присваиванием
+	Fraction operator/=(const int); //деление на целое число с присваиванием
+
+	bool operator==(Fraction& ) const;
+	bool operator!=(Fraction& ) const;
+
 	friend void operator<<(ostream& , const Fraction& ); //вывод
 	friend void operator>>(istream& , Fraction& ); //ввод
 private:
@@ -91,38 +107,78 @@ Fraction Fraction::operator=(const Fraction& rhs)
 	return Fraction(numerator,denominator);
 }
 
-Fraction Fraction::operator+(const Fraction& rhs) 
+Fraction Fraction::operator+(const Fraction& rhs) const  
 {
 	return Fraction(numerator*rhs.denominator + denominator*rhs.numerator, denominator*rhs.denominator);
 }
-Fraction Fraction::operator-(const Fraction& rhs)
+Fraction Fraction::operator-(const Fraction& rhs) const 
 {
 	return Fraction(numerator * rhs.denominator - denominator * rhs.numerator, denominator * denominator);
 }
-Fraction Fraction::operator*(const Fraction& rhs) 
+Fraction Fraction::operator*(const Fraction& rhs) const
 {
 	return Fraction(numerator * rhs.numerator, denominator * rhs.denominator);
 }
-Fraction Fraction::operator/(const Fraction& rhs) 
+Fraction Fraction::operator/(const Fraction& rhs) const
 {
 	return Fraction(numerator * rhs.denominator, denominator * rhs.numerator);
 }
 
-Fraction Fraction::operator+(const int rhs) 
+Fraction Fraction::operator+(const int rhs) const
 {
 	return Fraction(numerator + denominator * rhs, denominator * denominator);
 }
-Fraction Fraction::operator-(const int rhs)
+Fraction Fraction::operator-(const int rhs) const
 {
 	return Fraction(numerator - denominator * rhs, denominator * denominator);
 }
-Fraction Fraction::operator*(const int rhs) 
+Fraction Fraction::operator*(const int rhs) const
 {
 	return Fraction(numerator * rhs, denominator);
 }
-Fraction Fraction::operator/(const int rhs) 
+Fraction Fraction::operator/(const int rhs) const
 {
 	return Fraction(numerator, denominator * rhs);
+}
+
+//---------?????????????????????????????????????????????????????????????????????????????
+Fraction Fraction::operator+=(const Fraction& rhs)
+{
+	return Fraction(numerator = numerator * rhs.denominator + denominator * rhs.numerator, denominator = denominator * rhs.denominator);
+}
+Fraction Fraction::operator-=(const Fraction& rhs)
+{
+	return Fraction(numerator = numerator * rhs.denominator + denominator * rhs.numerator, denominator = denominator * rhs.denominator);
+}
+Fraction Fraction::operator*=(const Fraction& rhs)
+{
+	return Fraction(numerator *= rhs.numerator, denominator *= rhs.denominator);
+}
+Fraction Fraction::operator+=(const int rhs)
+{
+	return Fraction(numerator += denominator * rhs, denominator += 0);
+}
+Fraction Fraction::operator-=(const int rhs)
+{
+	return Fraction(numerator -= denominator * rhs, denominator += 0);
+}
+Fraction Fraction::operator*=(const int rhs)
+{
+	return Fraction(numerator *= rhs, denominator += 0);
+}
+Fraction Fraction::operator/=(const int rhs)
+{
+	return Fraction(numerator += 0, denominator *= rhs);
+}
+//---------?????????????????????????????????????????????????????????????????????????????
+
+bool Fraction::operator==(Fraction& fr) const   
+{
+	return numerator == fr.numerator && denominator == fr.denominator;
+}
+bool Fraction::operator!=(Fraction& fr) const
+{
+	return numerator != fr.numerator || denominator != fr.denominator;
 }
 
 void operator>>(istream& in, Fraction& f)
