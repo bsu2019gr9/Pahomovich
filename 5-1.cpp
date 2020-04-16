@@ -1,7 +1,9 @@
 #include <iostream>
+#include <cmath>
 #include "ArraysPahomovich.h"
 
 using namespace std;
+
 //Класс арифметическая дробь.
 
 struct Fraction //хранится как "numerator/denominator"
@@ -33,13 +35,17 @@ public:
 	Fraction operator*=(const int); //умножение на целое число с присваиванием
 	Fraction operator/=(const int); //деление на целое число с присваиванием
 
-	bool operator==(Fraction& ) const;
-	bool operator!=(Fraction& ) const;
+	bool operator==(Fraction& ) const; //операция равенства
+	bool operator!=(Fraction& ) const; //операция неравенства
 
 	friend void operator<<(ostream& , const Fraction& ); //вывод
 	friend void operator>>(istream& , Fraction& ); //ввод
+
+	bool isProperFraction( ); //возвращает true, если дробь правильная и false, если неправильная
+
 private:
 	void reduceFr( ); //сокращение дроби
+	void findSign( ); //определение знака в дроби
 	int founding_GCD(int tmp_a, int tmp_b)
 	{
 		if (tmp_a % tmp_b == 0) return tmp_b;
@@ -50,36 +56,41 @@ private:
 Fraction Value(Fraction fr) { 	return fr;   }
 Fraction* fff(Fraction* fr) {	return fr;   }
 Fraction Link(Fraction& fr) {	return fr;   }
+Fraction sumOfElements(Fraction** Fr, int N); //находит сумму элементов в массиве из дробей
 
 int main() {
-	int i(11);
+	int i(11), N(3);
 	Fraction fr1 = { 2 , 3 };
-	Fraction fr2 = { 1,2 };
+	Fraction fr2 = { 4 , -8 };
 	Fraction fr3 = fr2;
-	Fraction Fr[4];
-	Fraction* Fr2 = new Fraction(1, 2);
+	Fraction* Fr2 = new Fraction(5, 6);
 	Fraction* Fr3 = &fr3;
-	cout << *Fr2;
-	cout << fr1; cout << '\n';
-	fr1 = { 1 , 2 };
-	cout << fr1; cout << '\n';
-	cin >> fr3;
-	cout << fr3; cout << '\n';
-	Fraction f4 = { 1,1 };
-	f4 = fr3;
-	f4 = fr3 + fr1;
-	f4 = fr2 - *Fr2;
-	cout << f4; cout << '\n';
+	Fraction** Fr = nullptr;
+	Fr = new (nothrow) Fraction * [N];
+	Fr[0] = &fr1; Fr[1] = &fr2; Fr[2] = &fr3;
+	Fraction fr4;
+	fr4 = fr1 + fr2; cout << fr4; cout << '\n';
+	fr4 = *Fr2 - fr2; cout << fr4; cout << '\n';
+	fr4 = fr1*6; cout << fr4; cout << '\n';
+	fr4 -= {1, 1}; cout << fr4; cout << '\n';
+	cin >> fr4; 
+	cout << fr4; cout << '\n';
 	cout << Value(fr1);
 	cout << Link(fr2);
 	cout << fff(Fr2);
-	fr2 = { 4,8 };
-	cout << fr2; cout << '\n';
+	Fraction sum = { 0,1 };
+	sum = sumOfElements(Fr, 3);
+	cout << "--------------------------------------------------------------------\n";
+	cout << sum; cout << "\n";
+	if (fr2.isProperFraction()) cout << "is proper fraction\n";
+	else cout << "is unproper fraction\n";
 	delete Fr2; Fr2 = nullptr;
+	delete[] Fr; Fr = nullptr;
+	return 0;
 }
 
 Fraction::Fraction() :
-	numerator(1),
+	numerator(0),
 	denominator(1)
 {
 	cout << "no params constructor working \n";
@@ -89,7 +100,11 @@ Fraction::Fraction(int num, int denom) :
 	denominator(denom)
 {
 	if (!denominator) throw "Bad arg";
-	else reduceFr();
+	else
+	{
+		reduceFr();
+		findSign();
+	}
 	cout << "constructor working for " << this->numerator << '/' << this->denominator << "\n";
 };
 Fraction::Fraction(const Fraction& other) :
@@ -200,6 +215,29 @@ void Fraction::reduceFr()
 		if (a % b == 0) {   break;   }
 		else swap(a, b);
 	}
-	numerator = numerator / b;
-	denominator = denominator / b;
+	numerator /= b;
+	denominator /= b;
+}
+void Fraction::findSign()
+{
+	if (denominator < 0)
+	{
+		denominator *= (-1);
+		numerator *= (-1);
+	}
+}
+bool Fraction::isProperFraction()
+{
+	if (abs(numerator) < abs(denominator)) return true;
+	else return false;
 };
+
+Fraction sumOfElements(Fraction** Fr, int N)
+{
+	Fraction sum = { 0,1 };
+	for (Fraction** p = Fr; p < Fr + N; ++p)
+	{
+		sum += **p;
+	}
+	return sum;
+}
