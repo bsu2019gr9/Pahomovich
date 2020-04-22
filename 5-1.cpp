@@ -1,9 +1,9 @@
 #include <iostream>
+#include <iomanip>
 #include <cmath>
 #include "ArraysPahomovich.h"
 
 using namespace std;
-
 //Класс арифметическая дробь.
 
 struct Fraction //хранится как "numerator/denominator"
@@ -37,7 +37,10 @@ public:
 
 	bool operator==(Fraction& ) const; //операция равенства
 	bool operator!=(Fraction& ) const; //операция неравенства
-
+	bool operator>=(Fraction& ); //оператор  >=
+	bool operator>(Fraction& ); //оператор  >
+    bool operator<=(Fraction& ); //оператор  <=
+	bool operator<(Fraction& ); //оператор  <
 	friend void operator<<(ostream& , const Fraction& ); //вывод
 	friend void operator>>(istream& , Fraction& ); //ввод
 
@@ -53,38 +56,47 @@ private:
 	}
 };
 
-Fraction Value(Fraction fr) { 	return fr;   }
-Fraction* fff(Fraction* fr) {	return fr;   }
-Fraction Link(Fraction& fr) {	return fr;   }
-Fraction sumOfElements(Fraction** Fr, int N); //находит сумму элементов в массиве из дробей
+typedef Fraction myType;
+myType sumOfElements(myType* Fr, int N); //возвращает сумму элементов массива
+myType findMax(myType* beg, myType* end); //возвращает максимальный элемент массива
+myType findMin(myType* beg, myType* end); //возвращает минимальный элемент массива
+void findMaxMin(myType* beg, myType* end, myType& min, myType& max); //находит мин и макс элементы массива
+void printArray(myType* beg, myType* end); // печать массива
+void inputArray(myType* beg, myType* end); // ввод массива с клавиатуры
+void initArray(myType* beg, myType* end);
+void bubbleSort(myType* beg, size_t N); // пузырьковая сортировка
+Fraction sumOfProper(Fraction* Fr, int N); //
 
 int main() {
-	int i(11), N(3);
-	Fraction fr1 = { 2 , 3 };
+	int i(11), N(6);
+	Fraction fr1 = { 3 , 2 };
 	Fraction fr2 = { 4 , -8 };
-	Fraction fr3 = fr2;
-	Fraction* Fr2 = new Fraction(5, 6);
-	Fraction* Fr3 = &fr3;
-	Fraction** Fr = nullptr;
-	Fr = new (nothrow) Fraction * [N];
-	Fr[0] = &fr1; Fr[1] = &fr2; Fr[2] = &fr3;
-	Fraction fr4;
-	fr4 = fr1 + fr2; cout << fr4; cout << '\n';
-	fr4 = *Fr2 - fr2; cout << fr4; cout << '\n';
-	fr4 = fr1*6; cout << fr4; cout << '\n';
-	fr4 -= {1, 1}; cout << fr4; cout << '\n';
-	cin >> fr4; 
-	cout << fr4; cout << '\n';
-	cout << Value(fr1);
-	cout << Link(fr2);
-	cout << fff(Fr2);
+	Fraction* fr3 = new Fraction(5, 6);
+	Fraction* fr4 = &fr2;
+	Fraction* Fr = nullptr; 	Fr = new Fraction[N];
+	Fr[0] = fr1; Fr[1] = fr2; Fr[2] = *fr3; Fr[3] = { 5,3 }; Fr[4] = *fr4;
+	cout << fr1 + fr2; cout << '\n';
+	cout << *fr3 - fr2; cout << '\n';
+	cout << fr1 * 6; cout << '\n';
+    cout << (fr2 -= {1, 1}); cout << '\n';
+	cout << (fr1 /= 2); cout << '\n';
+	cout << (fr1 == fr2); cout << '\n';
+	cout << (fr1 > *fr4); cout << "\n Enter your fraction";
+	cin >> *fr4; 
+	cout << *fr4; cout << '\n';
+	cout << " Sorted array: \n";
+	bubbleSort(Fr, N);
+	printArray(Fr, Fr + N);
+	cout << " Sum of array elements: \n";
 	Fraction sum = { 0,1 };
-	sum = sumOfElements(Fr, 3);
-	cout << "--------------------------------------------------------------------\n";
+	sum=sumOfElements(Fr,N);
 	cout << sum; cout << "\n";
-	if (fr2.isProperFraction()) cout << "is proper fraction\n";
+	cout << fr2; 
+	if ((*fr4).isProperFraction()) cout << " is proper fraction\n";
 	else cout << "is unproper fraction\n";
-	delete Fr2; Fr2 = nullptr;
+	Fraction propSum=sumOfProper(Fr, N);
+	cout << propSum; cout << "\n";
+	delete fr3; fr3 = nullptr;
 	delete[] Fr; Fr = nullptr;
 	return 0;
 }
@@ -93,7 +105,7 @@ Fraction::Fraction() :
 	numerator(0),
 	denominator(1)
 {
-	cout << "no params constructor working \n";
+	/*cout << "no params constructor working \n"; */
 };
 Fraction::Fraction(int num, int denom) : 
 	numerator(num),
@@ -105,18 +117,18 @@ Fraction::Fraction(int num, int denom) :
 		reduceFr();
 		findSign();
 	}
-	cout << "constructor working for " << this->numerator << '/' << this->denominator << "\n";
+/*	cout << "constructor working for " << this->numerator << '/' << this->denominator << "\n"; */
 };
 Fraction::Fraction(const Fraction& other) :
 	numerator(other.numerator),
 	denominator(other.denominator)
 {
-	cout << "copy constructor working for " << this->numerator << '/' << this->denominator << "\n";
+/*	cout << "copy constructor working for " << this->numerator << '/' << this->denominator << "\n"; */
 };
-Fraction::~Fraction() { cout << "destructor working for..." << this->numerator << '/' << this->denominator << "\n";; };
+Fraction::~Fraction() { /*cout << "destructor working for..." << this->numerator << '/' << this->denominator << "\n";*/; };
 Fraction Fraction::operator=(const Fraction& rhs)
 {
-	cout << "= working for " << rhs.numerator << '/' << rhs.denominator << "\n";
+	/*cout << "= working for " << rhs.numerator << '/' << rhs.denominator << "\n";*/
 	numerator = rhs.numerator;
 	denominator = rhs.denominator;
 	return Fraction(numerator,denominator);
@@ -156,7 +168,6 @@ Fraction Fraction::operator/(const int rhs) const
 	return Fraction(numerator, denominator * rhs);
 }
 
-//---------?????????????????????????????????????????????????????????????????????????????
 Fraction Fraction::operator+=(const Fraction& rhs)
 {
 	return Fraction(numerator = numerator * rhs.denominator + denominator * rhs.numerator, denominator = denominator * rhs.denominator);
@@ -185,7 +196,6 @@ Fraction Fraction::operator/=(const int rhs)
 {
 	return Fraction(numerator += 0, denominator *= rhs);
 }
-//---------?????????????????????????????????????????????????????????????????????????????
 
 bool Fraction::operator==(Fraction& fr) const   
 {
@@ -195,7 +205,18 @@ bool Fraction::operator!=(Fraction& fr) const
 {
 	return numerator != fr.numerator || denominator != fr.denominator;
 }
-
+bool Fraction::operator<(Fraction& fr)
+{
+	if (numerator * fr.denominator < fr.numerator * denominator)
+		return true;
+	else return false;
+}
+bool Fraction::operator>(Fraction& fr)
+{
+	if (numerator * fr.denominator > fr.numerator * denominator)
+		return true;
+	else return false;
+}
 void operator>>(istream& in, Fraction& f)
 {
 	in >> f.numerator;
@@ -232,12 +253,65 @@ bool Fraction::isProperFraction()
 	else return false;
 };
 
-Fraction sumOfElements(Fraction** Fr, int N)
+Fraction sumOfElements(myType* Fr, int N)
 {
-	Fraction sum = { 0,1 };
-	for (Fraction** p = Fr; p < Fr + N; ++p)
+	myType sum = { 0,1 };
+	for (myType* p = Fr; p < Fr + N; ++p)
 	{
-		sum += **p;
+		sum += *p;
 	}
 	return sum;
+}
+void findMaxMin(myType* beg, myType* end, myType& min, myType& max) {
+
+	for (myType* p = beg; p < end; ++p)
+	{
+		if (*p < min) min = *p;
+		if (*p > max)max = *p;
+	}
+}
+myType findMax(myType* beg, myType* end) {
+	myType max = *beg;
+	for (myType* p = beg; p < end; ++p)
+		if (*p > max) max = *p;
+	return max;
+}
+myType findMin(myType* beg, myType* end) {
+	myType min = *beg;
+	for (myType* p = beg; p < end; ++p)
+		if (*p < min) min = *p;
+	return min;
+}
+void printArray(myType* beg, myType* end) {
+	for (myType* p = beg; p < end; ++p)
+	{	cout << *p; cout << " ";	}
+	cout << '\n';
+}
+void inputArray(myType* beg, myType* end) {
+	for (myType* p = beg; p < end; ++p)
+		cin >> *p;
+}
+void bubbleSort(myType* beg, size_t N)
+{
+	for (size_t j = 0; j < N; ++j)
+		for (myType* p = beg; p < beg + N - 1; ++p)
+		{
+			if (*p > * (p + 1))
+			{
+				swap(*p, *(p + 1));
+			}
+		}
+}
+Fraction sumOfProper(Fraction* Fr, int N) {
+	Fraction sum = { 0,1 };
+	for (Fraction* p = Fr; p < Fr + N; ++p)
+	{
+		if ((*p).isProperFraction()) sum += *p;
+	}
+	return sum;
+}
+void inputArray(myType* beg, myType* end) {
+	int i = 1;
+	for (myType* p = beg; p < end; ++p)
+		*p = {i,++i };
 }
