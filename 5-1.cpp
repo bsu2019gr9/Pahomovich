@@ -37,10 +37,10 @@ public:
 
 	bool operator==(Fraction& ) const; //операция равенства
 	bool operator!=(Fraction& ) const; //операция неравенства
-	bool operator>=(Fraction& ); //оператор  >=
-	bool operator>(Fraction& ); //оператор  >
-    bool operator<=(Fraction& ); //оператор  <=
-	bool operator<(Fraction& ); //оператор  <
+	bool operator>=(Fraction& ) const; //оператор  >=
+	bool operator>(Fraction& ) const; //оператор  >
+    bool operator<=(Fraction& ) const; //оператор  <=
+	bool operator<(Fraction& ) const; //оператор  <
 	friend void operator<<(ostream& , const Fraction& ); //вывод
 	friend void operator>>(istream& , Fraction& ); //ввод
 
@@ -57,23 +57,39 @@ private:
 };
 
 typedef Fraction myType;
-myType sumOfElements(myType* Fr, int N); //возвращает сумму элементов массива
-myType findMax(myType* beg, myType* end); //возвращает максимальный элемент массива
-myType findMin(myType* beg, myType* end); //возвращает минимальный элемент массива
-void findMaxMin(myType* beg, myType* end, myType& min, myType& max); //находит мин и макс элементы массива
-void printArray(myType* beg, myType* end); // печать массива
-void inputArray(myType* beg, myType* end); // ввод массива с клавиатуры
-void initArray(myType* beg, myType* end);
-void bubbleSort(myType* beg, size_t N); // пузырьковая сортировка
-Fraction sumOfProper(Fraction* Fr, int N); //
+
+// функции на хипе:
+myType* createArr(size_t);
+void* createArr(size_t, myType*&);
+void freeMemory(myType*&);
+myType findMax(myType* , myType* ); //возвращает максимальный элемент массива
+myType findMin(myType* , myType* ); //возвращает минимальный элемент массива
+void findMaxMin(myType* , myType* , myType& , myType& ); //находит мин и макс элементы массива
+void printArray(myType* , myType* ); // печать массива
+void inputArray(myType* , myType* ); // ввод массива с клавиатуры
+void initArray(myType* , myType* ); // инициализация массива
+void initRandomArray(myType* , myType* , const int  = -5, const int  = 5); // иницилизация массива рандомными значениями
+myType sumOfElements(myType*, myType*); //возвращает сумму элементов массива
+Fraction sumOfProper(Fraction*, Fraction*); //подсчёт суммы правильных дробей
+void bubbleSort(myType*, size_t); // пузырьковая сортировка
+void reverse(myType* , myType* );
+
+// функции на стеке:
+myType findMax(myType*, size_t); //возвращает максимальный элемент массива
+myType findMin(myType*, size_t); //возвращает минимальный элемент массива
+void bubbleSort(myType*, size_t); // пузырьковая сортировка
+myType sumOfElements(myType*, size_t); //возвращает сумму элементов массива
+void printArray(myType*, size_t); // печать массива
+void inputArray(myType*, size_t); // ввод массива с клавиатуры
 
 int main() {
-	int i(11), N(6);
+	int i(11), N(5);
 	Fraction fr1 = { 3 , 2 };
 	Fraction fr2 = { 4 , -8 };
 	Fraction* fr3 = new Fraction(5, 6);
 	Fraction* fr4 = &fr2;
-	Fraction* Fr = nullptr; 	Fr = new Fraction[N];
+	Fraction* Fr = nullptr; 
+	createArr(N,Fr);
 	Fr[0] = fr1; Fr[1] = fr2; Fr[2] = *fr3; Fr[3] = { 5,3 }; Fr[4] = *fr4;
 	cout << fr1 + fr2; cout << '\n';
 	cout << *fr3 - fr2; cout << '\n';
@@ -89,15 +105,15 @@ int main() {
 	printArray(Fr, Fr + N);
 	cout << " Sum of array elements: \n";
 	Fraction sum = { 0,1 };
-	sum=sumOfElements(Fr,N);
+	sum=sumOfElements(Fr,Fr+N);
 	cout << sum; cout << "\n";
 	cout << fr2; 
 	if ((*fr4).isProperFraction()) cout << " is proper fraction\n";
 	else cout << "is unproper fraction\n";
-	Fraction propSum=sumOfProper(Fr, N);
+	Fraction propSum=sumOfProper(Fr,Fr+N);
 	cout << propSum; cout << "\n";
 	delete fr3; fr3 = nullptr;
-	delete[] Fr; Fr = nullptr;
+	freeMemory(Fr);
 	return 0;
 }
 
@@ -205,15 +221,27 @@ bool Fraction::operator!=(Fraction& fr) const
 {
 	return numerator != fr.numerator || denominator != fr.denominator;
 }
-bool Fraction::operator<(Fraction& fr)
+bool Fraction::operator<(Fraction& fr) const
 {
 	if (numerator * fr.denominator < fr.numerator * denominator)
 		return true;
 	else return false;
 }
-bool Fraction::operator>(Fraction& fr)
+bool Fraction::operator>(Fraction& fr) const
 {
 	if (numerator * fr.denominator > fr.numerator * denominator)
+		return true;
+	else return false;
+}
+bool Fraction::operator<=(Fraction& fr) const
+{
+	if (numerator * fr.denominator < fr.numerator * denominator || numerator * fr.denominator == fr.numerator * denominator)
+		return true;
+	else return false;
+}
+bool Fraction::operator>=(Fraction& fr) const
+{
+	if (numerator * fr.denominator > fr.numerator* denominator || numerator * fr.denominator == fr.numerator * denominator)
 		return true;
 	else return false;
 }
@@ -253,10 +281,11 @@ bool Fraction::isProperFraction()
 	else return false;
 };
 
-Fraction sumOfElements(myType* Fr, int N)
+// функции на хипе
+Fraction sumOfElements(myType* beg, myType* end)
 {
 	myType sum = { 0,1 };
-	for (myType* p = Fr; p < Fr + N; ++p)
+	for (myType* p = beg; p < end; ++p)
 	{
 		sum += *p;
 	}
@@ -302,16 +331,84 @@ void bubbleSort(myType* beg, size_t N)
 			}
 		}
 }
-Fraction sumOfProper(Fraction* Fr, int N) {
+Fraction sumOfProper(Fraction* beg, Fraction* end) {
 	Fraction sum = { 0,1 };
-	for (Fraction* p = Fr; p < Fr + N; ++p)
+	for (Fraction* p = beg; p < end; ++p)
 	{
 		if ((*p).isProperFraction()) sum += *p;
 	}
 	return sum;
 }
-void inputArray(myType* beg, myType* end) {
+void initArray(myType* beg, myType* end) {
 	int i = 1;
 	for (myType* p = beg; p < end; ++p)
 		*p = {i,++i };
+}
+myType* createArr(size_t N)
+{
+	myType* Arr = nullptr;
+	try { Arr = new myType[N]; }
+	catch (...) { cout << "No memory...\n"; exit(101); }
+	return Arr;
+}
+void* createArr(size_t N, myType*& Arr)
+{
+	Arr = new (nothrow) myType[N];
+	if (!Arr) exit(101);
+}
+void freeMemory(myType*& Arr)
+{
+	if (Arr)
+	{	delete[] Arr; Arr = nullptr;	}
+
+}
+void initRandomArray(myType* beg, myType* end, const int m , const int M ) {
+	srand(time(NULL));
+	int d = (M - m + 1);
+	for (myType* p = beg; p < end; ++p)
+		*p = { rand() / d + m, rand() / d + m };
+}
+void reverse(myType* beg, myType* end)
+{
+
+	for (myType* p = beg, *q = end - 1; p < q; ++p, --q)
+	{
+		swap(*p, *q);
+	}
+}
+
+
+
+// функции на стеке
+myType findMax(myType* Arr, size_t N) {
+	myType max = Arr[0];
+	for (size_t i = 0; i < N; ++i)
+		if (Arr[i] > max) max = Arr[i];
+	return max;
+}
+myType findMin(myType* Arr, size_t N) {
+	myType min = Arr[0];
+	for (size_t i = 0; i < N; ++i)
+		if (Arr[i] > min) min = Arr[i];
+	return min;
+}
+void printArray(myType* Arr, size_t N) {
+	for (size_t i = 0; i < N; ++i)
+	{
+		cout << Arr[i]; cout << " ";
+	}
+	cout << '\n';
+}
+void inputArray(myType* Arr, size_t N) {
+	for (size_t i = 0; i < N; ++i)
+		cin >> Arr[i];
+}
+Fraction sumOfElements(myType* Arr, size_t N)
+{
+	myType sum = { 0,1 };
+	for (size_t i = 0; i < N; ++i)
+	{
+		sum += Arr[i];
+	}
+	return sum;
 }
