@@ -1,28 +1,27 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-#include "ArraysPahomovich.h"
+#include "FractionStruct.h"
 
 using namespace std;
-
-
+//Класс арифметическая дробь.
 typedef Fraction myType;
 
 // функции на хипе:
 myType* createArr(size_t);
 void* createArr(size_t, myType*&);
 void freeMemory(myType*&);
-myType findMax(myType* , myType* ); //возвращает максимальный элемент массива
-myType findMin(myType* , myType* ); //возвращает минимальный элемент массива
-void findMaxMin(myType* , myType* , myType& , myType& ); //находит мин и макс элементы массива
-void printArray(myType* , myType* ); // печать массива
-void inputArray(myType* , myType* ); // ввод массива с клавиатуры
-void initArray(myType* , myType* ); // инициализация массива
-void initRandomArray(myType* , myType* , const int  = -5, const int  = 5); // иницилизация массива рандомными значениями
+myType findMax(myType*, myType*); //возвращает максимальный элемент массива
+myType findMin(myType*, myType*); //возвращает минимальный элемент массива
+void findMaxMin(myType*, myType*, myType&, myType&); //находит мин и макс элементы массива
+void printArray(myType*, myType*); // печать массива
+void inputArray(myType*, myType*); // ввод массива с клавиатуры
+void initArray(myType*, myType*); // инициализация массива
+void initRandomArray(myType*, myType*, const int = -5, const int = 5); // иницилизация массива рандомными значениями
 myType sumOfElements(myType*, myType*); //возвращает сумму элементов массива
 Fraction sumOfProper(Fraction*, Fraction*); //подсчёт суммы правильных дробей
 void bubbleSort(myType*, size_t); // пузырьковая сортировка
-void reverse(myType* , myType* );
+void reverse(myType*, myType*);
 
 // функции на стеке:
 myType findMax(myType*, size_t); //возвращает максимальный элемент массива
@@ -41,6 +40,15 @@ int main() {
 	Fraction* Fr = nullptr; 
 	createArr(N,Fr);
 	Fr[0] = fr1; Fr[1] = fr2; Fr[2] = *fr3; Fr[3] = { 5,3 }; Fr[4] = *fr4;
+	cout << fr1 + fr2; cout << '\n';
+	cout << *fr3 - fr2; cout << '\n';
+	cout << fr1 * 6; cout << '\n';
+    cout << (fr2 -= {1, 1}); cout << '\n';
+	cout << (fr1 /= 2); cout << '\n';
+	cout << (fr1 == fr2); cout << '\n';
+	cout << (fr1 > *fr4); cout << "\n Enter your fraction";
+	cin >> *fr4; 
+	cout << *fr4; cout << '\n';
 	cout << " Sorted array: \n";
 	bubbleSort(Fr, N);
 	printArray(Fr, Fr + N);
@@ -143,7 +151,7 @@ void initRandomArray(myType* beg, myType* end, const int m , const int M ) {
 	srand(time(NULL));
 	int d = (M - m + 1);
 	for (myType* p = beg; p < end; ++p)
-		*p = { rand() % d + m, rand() % d + m };
+		*p = { rand() / d + m, rand() / d + m };
 }
 void reverse(myType* beg, myType* end)
 {
