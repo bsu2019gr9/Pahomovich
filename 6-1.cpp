@@ -34,7 +34,9 @@ int main() {
 
 	begR = 15;	begG = 201;	begB = 244;
 	endR = 200;	endG = 33;	endB = 104;
-	step = 80;
+	step = 80;//неверно работает при step=255
+	/*	begR = 150;	begG = 255;	begB = 0;
+	endR = 200;	endG = 33;	endB = 104;*/
 
 	if (step > wid)   step = wid;
 
